@@ -1,0 +1,10 @@
+wp-admin
+wp-includes
+!wp-config.php
+wordpress/*
+
+!wordpress/wp-content
+wordpress/wp-content/*
+!wordpress/wp-content/themes/
+wordpress/wp-content/themes/*
+!wordpress/wp-content/themes/pdf-manage/
