@@ -35,7 +35,7 @@ function smd_delete_scheduled_media() {
 
     $args = array(
         'post_type'      => 'attachment',
-        'posts_per_page' => -1,
+        'post_status' => 'any',
         'meta_query'     => array(
             array(
                 'key'     => '_smd_deletion_date',
@@ -149,6 +149,7 @@ function smd_check_meta_data() {
     if ( current_user_can( 'manage_options' ) && isset( $_GET['smd_check_meta'] ) ) {
         $args = array(
             'post_type'      => 'attachment',
+            'post_status' => 'any',
             'posts_per_page' => -1,
         );
 
@@ -173,14 +174,16 @@ add_action( 'init', 'smd_check_meta_data' );
 
 function smd_test_meta_query() {
     if ( current_user_can( 'manage_options' ) && isset( $_GET['smd_test_meta_query'] ) ) {
+        $current_date = current_time('Y-m-d'); // 現在の日付を取得
         $args = array(
             'post_type'      => 'attachment',
-            'posts_per_page' => -1,
+            'post_status' => 'any',
             'meta_query'     => array(
                 array(
                     'key'     => '_smd_deletion_date',
-                    'value'   => '',
-                    'compare' => 'EXISTS'
+                    'value'   => $current_date,
+                    'compare' => '<=',
+                    'type'    => 'DATE'
                 )
             )
         );
