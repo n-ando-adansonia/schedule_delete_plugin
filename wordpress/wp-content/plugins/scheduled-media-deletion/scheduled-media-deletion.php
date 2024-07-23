@@ -44,8 +44,6 @@ function smd_delete_scheduled_media() {
     );
 
     $query = new WP_Query( $args );
-    // debuglog にqueryを出力
-    error_log( print_r( $query, true ) );
     if ( $query->have_posts() ) {
         while ( $query->have_posts() ) {
             $query->the_post();
@@ -112,8 +110,7 @@ function smd_save_meta_box_data( $post_id ) {
         error_log( "Deletion date not set for post ID $post_id" );
     }
 }
-add_action( 'save_post', 'smd_save_meta_box_data' );
-
+add_action( 'edit_attachment', 'smd_save_meta_box_data' );
 
 // 手動トリガー用の関数
 function smd_manual_trigger() {
@@ -136,6 +133,8 @@ function smd_log_cron_events() {
     }
 }
 add_action( 'init', 'smd_log_cron_events' );
+
+
 
 
 // $media_id = 8; // テストするメディアのID
