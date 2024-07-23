@@ -208,11 +208,4 @@ function smd_test_meta_query() {
 }
 add_action( 'init', 'smd_test_meta_query' );
 
-
-// $media_id = 8; // テストするメディアのID
-// update_post_meta( $media_id, '_smd_deletion_date', '2024-07-19' ); // 過去の日付を設定
-
-// $date = get_post_meta( $media_id, '_smd_deletion_date', true );
-// error_log( "The saved deletion date for media ID {$media_id} is: {$date}" );
-
 ?>
