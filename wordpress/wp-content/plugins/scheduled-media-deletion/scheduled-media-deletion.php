@@ -178,11 +178,17 @@ function smd_test_meta_query() {
             'post_type'      => 'attachment',
             'post_status'    => 'any',
             'meta_query'     => array(
+                'relation' => 'AND',
                 array(
                     'key'     => '_smd_deletion_date',
                     'value'   => $current_date,
                     'compare' => '<=',
                     'type'    => 'DATE'
+                ),
+                array(
+                    'key'     => '_smd_deletion_date',
+                    'value'   => '',
+                    'compare' => '!='
                 )
             )
         );
