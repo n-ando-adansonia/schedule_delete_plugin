@@ -30,13 +30,16 @@ register_deactivation_hook( __FILE__, 'smd_clear_scheduled_event' );
 
 // メディアの削除を実行
 function smd_delete_scheduled_media() {
+    $current_date = current_time('Y-m-d'); // 現在の日付を取得
+    error_log("Current date is " . $current_date); // デバッグログに現在の日付を記録
+
     $args = array(
         'post_type'      => 'attachment',
         'posts_per_page' => -1,
         'meta_query'     => array(
             array(
                 'key'     => '_smd_deletion_date',
-                'value'   => current_time( 'Y-m-d' ),
+                'value'   => $current_date,
                 'compare' => '<=',
                 'type'    => 'DATE'
             )
@@ -44,15 +47,21 @@ function smd_delete_scheduled_media() {
     );
 
     $query = new WP_Query( $args );
+    error_log("Query arguments: " . print_r($args, true));
+    error_log("Query results: " . print_r($query->posts, true)); // デバッグのためにクエリ結果をログに出力
+
     if ( $query->have_posts() ) {
         while ( $query->have_posts() ) {
             $query->the_post();
-            wp_delete_attachment( get_the_ID(), true );
-            error_log( "Deleted attachment with ID " . get_the_ID() );
+            $attachment_id = get_the_ID();
+            $deletion_date = get_post_meta($attachment_id, '_smd_deletion_date', true);
+            error_log("Found attachment with ID $attachment_id, scheduled for deletion on $deletion_date");
+            wp_delete_attachment( $attachment_id, true );
+            error_log( "Deleted attachment with ID " . $attachment_id );
         }
         wp_reset_postdata();
     } else {
-        error_log( "No attachments found for deletion on " . current_time( 'Y-m-d' ) );
+        error_log( "No attachments found for deletion on " . $current_date );
     }
 }
 add_action( 'smd_daily_event', 'smd_delete_scheduled_media' );
@@ -135,6 +144,66 @@ function smd_log_cron_events() {
 add_action( 'init', 'smd_log_cron_events' );
 
 
+
+function smd_check_meta_data() {
+    if ( current_user_can( 'manage_options' ) && isset( $_GET['smd_check_meta'] ) ) {
+        $args = array(
+            'post_type'      => 'attachment',
+            'posts_per_page' => -1,
+        );
+
+        $query = new WP_Query( $args );
+
+        if ( $query->have_posts() ) {
+            while ( $query->have_posts() ) {
+                $query->the_post();
+                $attachment_id = get_the_ID();
+                $deletion_date = get_post_meta($attachment_id, '_smd_deletion_date', true);
+                error_log("Attachment ID: $attachment_id, Deletion Date: $deletion_date");
+            }
+            wp_reset_postdata();
+        } else {
+            error_log("No attachments found");
+        }
+        exit;
+    }
+}
+add_action( 'init', 'smd_check_meta_data' );
+
+
+function smd_test_meta_query() {
+    if ( current_user_can( 'manage_options' ) && isset( $_GET['smd_test_meta_query'] ) ) {
+        $args = array(
+            'post_type'      => 'attachment',
+            'posts_per_page' => -1,
+            'meta_query'     => array(
+                array(
+                    'key'     => '_smd_deletion_date',
+                    'value'   => '',
+                    'compare' => 'EXISTS'
+                )
+            )
+        );
+
+        $query = new WP_Query( $args );
+        error_log("Test Query arguments: " . print_r($args, true));
+        error_log("Test Query results: " . print_r($query->posts, true));
+
+        if ( $query->have_posts() ) {
+            while ( $query->have_posts() ) {
+                $query->the_post();
+                $attachment_id = get_the_ID();
+                $deletion_date = get_post_meta($attachment_id, '_smd_deletion_date', true);
+                error_log("Found attachment with ID $attachment_id, scheduled for deletion on $deletion_date");
+            }
+            wp_reset_postdata();
+        } else {
+            error_log( "No attachments found with _smd_deletion_date meta key" );
+        }
+        exit;
+    }
+}
+add_action( 'init', 'smd_test_meta_query' );
 
 
 // $media_id = 8; // テストするメディアのID
