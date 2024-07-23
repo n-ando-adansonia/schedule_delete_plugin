@@ -8,3 +8,6 @@ wordpress/wp-content/*
 !wordpress/wp-content/themes/
 wordpress/wp-content/themes/*
 !wordpress/wp-content/themes/pdf-manage/
+!wordpress/wp-content/plugins/
+wordpress/wp-content/plugins/*
+!wordpress/wp-content/plugins/scheduled*
