@@ -219,4 +219,20 @@ function smd_test_meta_query() {
 }
 add_action( 'init', 'smd_test_meta_query' );
 
+
+// メディアライブラリ一覧に削除する日を表示する
+function add_posts_columns($columns) {
+    $columns['cf'] = '削除する日';
+    return $columns;
+}
+
+function custom_posts_column($column_name, $post_id) {
+    if ($column_name == 'cf') {
+      $cf_date = get_post_meta($post_id, '_smd_deletion_date', true);
+      echo ($cf_date) ? $cf_date : '－';
+    }
+}
+add_filter('manage_media_columns', 'add_posts_columns');
+add_action('manage_media_custom_column', 'custom_posts_column', 10, 2);
+
 ?>
