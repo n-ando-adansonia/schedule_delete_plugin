@@ -74,7 +74,7 @@ add_action( 'smd_daily_event', 'smd_delete_scheduled_media' );
 
 // メタボックスの追加
 function smd_add_meta_boxes() {
-    add_meta_box( 'smd_meta_box', 'Scheduled Deletion Date', 'smd_meta_box_callback', 'attachment', 'side' );
+    add_meta_box( 'smd_meta_box', 'ファイル削除予約', 'smd_meta_box_callback', 'attachment', 'side' );
 }
 add_action( 'add_meta_boxes', 'smd_add_meta_boxes' );
 
@@ -83,7 +83,7 @@ function smd_meta_box_callback( $post ) {
     wp_nonce_field( 'smd_save_meta_box_data', 'smd_meta_box_nonce' );
     $value = get_post_meta( $post->ID, '_smd_deletion_date', true );
     
-    echo '<label for="smd_deletion_date">Deletion Date:</label>';
+    echo '<label for="smd_deletion_date">削除する日付:</label>';
     echo '<input type="date" id="smd_deletion_date" name="smd_deletion_date" value="' . esc_attr( $value ) . '" />';
 }
 
