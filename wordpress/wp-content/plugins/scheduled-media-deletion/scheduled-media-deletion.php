@@ -35,8 +35,8 @@ function smd_delete_scheduled_media() {
 
     $args = array(
         'post_type'      => 'attachment',
-        'posts_per_page' => -1,
         'post_status'    => 'any',
+        'posts_per_page' => -1,
         'meta_query'     => array(
             'relation' => 'AND',
             array(
@@ -155,7 +155,7 @@ function smd_check_meta_data() {
         $args = array(
             'post_type'      => 'attachment',
             'post_status'    => 'any',
-            'posts_per_page' => -1,
+            'posts_per_page' => -1
         );
 
         $query = new WP_Query( $args );
