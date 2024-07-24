@@ -35,6 +35,7 @@ function smd_delete_scheduled_media() {
 
     $args = array(
         'post_type'      => 'attachment',
+        'posts_per_page' => -1,
         'post_status'    => 'any',
         'meta_query'     => array(
             'relation' => 'AND',
@@ -89,7 +90,6 @@ function smd_meta_box_callback( $post ) {
 
 // メタデータの保存
 function smd_save_meta_box_data( $post_id ) {
-    error_log( "###### smd_save_meta_box_data #######" );
     error_log( "Attempting to save meta box data for post ID $post_id" );
 
     if ( ! isset( $_POST['smd_meta_box_nonce'] ) ) {
@@ -183,6 +183,7 @@ function smd_test_meta_query() {
         $args = array(
             'post_type'      => 'attachment',
             'post_status'    => 'any',
+            'posts_per_page' => -1,
             'meta_query'     => array(
                 'relation' => 'AND',
                 array(
