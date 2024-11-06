@@ -3,7 +3,7 @@
 Plugin Name: Scheduled Media Deletion
 Description: Automatically delete media files on a specified date.
 Version: 1.0
-Author: Your Name
+Author: Adansonia co
 */
 
 if ( ! defined( 'ABSPATH' ) ) {
